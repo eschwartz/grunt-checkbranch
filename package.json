@@ -26,12 +26,14 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "./node_modules/grunt-cli/bin/grunt test --verbose",
+    "default": "./node_modules/grunt-cli/bin/grunt --verbose"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.8.0",
     "grunt-contrib-clean": "~0.5.0",
     "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.13",
     "grunt-release": "~0.7.0",
     "buster": "~0.7.6",
     "grunt-buster": "~0.3.1"

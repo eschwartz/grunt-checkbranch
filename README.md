@@ -2,6 +2,8 @@
 
 > Check that we are on a correct Git branch before proceeding.
 
+[![Build Status](https://secure.travis-ci.org/dymonaz/grunt-checkbranch.png?branch=master)](http://travis-ci.org/dymonaz/grunt-checkbranch)
+
 ## Getting Started
 This plugin requires Grunt `~0.4.1`
 
