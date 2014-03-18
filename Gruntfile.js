@@ -31,7 +31,7 @@ module.exports = function (grunt) {
 		// Unit tests.
 		buster: {
 			dist: {
-
+				config: 'buster.js'
 			}
 		}
 
