@@ -25,11 +25,42 @@ Include the task as one of your multitasks, optionally passing the desired branc
 grunt.registerTask("default", ["test", "checkbranch:develop", "deploy"]
 ```
 
-In the example above, the `deploy` task will only be executed, if your project is currently on the `develop` branch - otherwise the run will result in a fatal error.
+In the example above, the `deploy` task will only be executed if your project is currently on the `develop` branch - otherwise the run will result in a fatal error.
 
 You may override this behavior by passing `--no-checkbranch` via command line. You can disable `--no-checkbranch` (i.e. force the check) by setting a second param for the task, e.g. `checkbranch:master:true`.
 
 You may also negate the test, i.e. exclude a specific branch by prepending an exclamation mark, e.g. `"checkbranch:!develop"`.
+
+### Options
+
+The `checkbranch` task can be configured with the following options:
+
+
+| option | type | default | description |
+-------- | ---- | ------- | ----------- |
+| force | Boolean | false | Overrides the --no-checkbranch option |
+| expectedBranch | String | "master" | The desired git branch. Can also be set using `checkbranch:expectedBranch` |
+| fatal | Boolean | true | Whether to cause a fatal error if the branch does not match |
+
+
+For example
+
+```javascript
+grunt.initConfig({
+  checkbranch: {
+    options: {
+      fatal: false
+    }
+  }
+});
+
+// Run build task,
+// but only deploy if on master branch
+grunt.registerTask('default', ['build', 'checkbranch:master', 'deploy']);
+
+// Using fatal:false will allow the build to "pass" on 
+// branches besides master, but prevent deployment.
+```
 
 ## Release History
 
