@@ -25,7 +25,8 @@ module.exports = function (grunt) {
     var isCorrectBranch;
     var options = this.options({
       force: force,
-      expectedBranch: expectedBranch || "master"
+      expectedBranch: expectedBranch || "master",
+      fatal: true
     });
     var isDisabled = grunt.option('no-checkbranch') && !options.force;
     var isNegated = options.expectedBranch[0] === "!";
@@ -39,6 +40,24 @@ module.exports = function (grunt) {
         replace("{not?}", isNegated ? " not" : "");
     }
 
+    function fail() {
+      var msg = template(
+        isNegated ?
+          "Anything except '{expectedBranch}' branch is allowed, and you're on '{currentBranch}' branch." :
+          "Only '{expectedBranch}' is allowed, and you're on '{currentBranch}' branch"
+      );
+
+      if (options.fatal) {
+        grunt.fail.fatal(msg);
+      }
+      else {
+        grunt.log.warn('Grunt task runner is being halted by the the \'checkbranch\' tasks: ' + msg);
+        grunt.task.clearQueue();
+        return true;
+      }
+    }
+
+
     expectedBranch = isNegated ? options.expectedBranch.slice(1) : options.expectedBranch;
     isCorrectBranch = isNegated ? currentBranch !== expectedBranch : currentBranch === expectedBranch;
 
@@ -50,11 +69,7 @@ module.exports = function (grunt) {
     grunt.log.writeln(template("Expecting to{not?} be on {expectedBranch} branch"));
 
     if (!isCorrectBranch) {
-      grunt.fail.fatal(template(
-        isNegated ?
-          "Anything except '{expectedBranch}' branch is allowed, and you're on '{currentBranch}' branch." :
-          "Only '{expectedBranch}' is allowed, and you're on '{currentBranch}' branch"
-      ));
+      fail();
     }
 
   });

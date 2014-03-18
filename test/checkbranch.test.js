@@ -94,6 +94,32 @@ buster.testCase("grunt-checkbranch", {
 		expect(output.output).toMatch(GRUNT_FATAL);
 		expect(output.output).toMatch("Failed to detect");
 		expect(output.code).toEqual(1, "Incorrect grunt output code");
-	}
+	},
+
+  "when the fatal option is disabled": {
+
+    "setUp": function() {
+      shell.cp("-f", "test/fixture-gruntfile-not-fatal.js", "tmp/Gruntfile.js");
+    },
+
+    "should not fail if on the wrong branch": function() {
+      var output = execGrunt("checkbranch:wrongBranch");
+      expect(output.output).toMatch(GRUNT_SUCCESS);
+      expect(output.code).toEqual(0, "Incorrect grunt output code");
+    },
+
+    "should run the next task if on the correct branch": function() {
+      var output = execGrunt("checkbranch:master log-foo log-bar");
+      expect(output.output).toMatch('foo'); // log-foo task
+      expect(output.output).toMatch('bar'); // log-bar task
+    },
+
+    "should not run the next task if on the wrong branch": function() {
+      var output = execGrunt("checkbranch:wrongBranch log-foo log-bar");
+      expect(output.output).not.toMatch('foo'); // log-foo task
+      expect(output.output).not.toMatch('bar'); // log-bar task
+    }
+
+  }
 
 });
